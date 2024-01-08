@@ -1,28 +1,27 @@
-import React from 'react';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import Logo from './static/images/quikpoll-logo.jpeg';
-import './styles/App.css';
+import React from "react";
+import Logo from "./static/images/quikpoll-logo.jpeg";
+import { Link } from "react-router-dom";
+import { Button, Box, Image, Text,HStack} from '@chakra-ui/react';
+import "./styles/App.css";
+
 
 export default function App() {
   return (
-    <div className="App">
-      <div className='header'>
-        <img src={Logo}></img>
-        <h1>Welcome to the QuikPoll app!</h1>
-      </div>
-      <div className='body'>
-        <div className='btn-div'>
-          <Grid container spacing={2} justifyContent="center" alignItems="center">
-            <Grid item>
-              <Button variant="contained">Create a poll.</Button>
-            </Grid>
-            <Grid item>
-              <Button variant="outlined">Join a poll.</Button>
-            </Grid>
-          </Grid>
-        </div>
-      </div>
-    </div>
+    <Box className="App" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+        <Box className="header">
+          <Image src={Logo} alt="QuikPoll Logo" />
+        </Box>
+        <Box className="body" mt={4}>
+          <Text fontSize="xl" fontWeight="bold">Welcome to the QuikPoll app!</Text>
+          <HStack justify="center" mt={4}>
+            <Link to="/create">
+              <Button colorScheme='blue' variant='solid'>Create a poll.</Button>
+            </Link>
+            <Link to="/join">
+              <Button colorScheme="blue" variant='outline'>Join a poll.</Button>
+            </Link>
+          </HStack>
+        </Box>
+      </Box>
   );
 }
