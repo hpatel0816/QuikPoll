@@ -5,7 +5,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './styles/index.css';
 import App from './App';
 import CreatePoll from './CreatePoll';
-import JoinPoll from './JoinPoll';
+import MainView from './MainView';
+import UserPoll from './UserPoll';
+import Results from './Results';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -15,7 +17,9 @@ root.render(
         <Switch>
           <Route exact path="/" component={App} />
           <Route path="/create" component={CreatePoll} />
-          <Route path="/join" component={JoinPoll} />
+          <Route path="/live-view" component={MainView} />
+          <Route path="/live-poll" component={UserPoll} />
+          <Route path="/results" component={Results} />
         </Switch>
       </div>
     </ChakraProvider>

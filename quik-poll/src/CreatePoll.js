@@ -3,18 +3,24 @@ import { Link } from "react-router-dom";
 import {Box, Text, VStack, FormControl, FormLabel, Input, Button, Flex} from "@chakra-ui/react";
 import io from 'socket.io-client';
 
-const socket = io.connect("http://localhost:3001");
-
 export default function CreatePoll() {
-
+    const [votingTopic, setVotingTopic] = useState('');
     const [options, setOptions] = React.useState(['', '']);
     const maxOptions = 8;
 
+    const handleVotingTopicChange = (event) => {
+        setVotingTopic(event.target.value);
+    };
+    
     const handleAddOption = () => {
         if (options.length < maxOptions) {
         setOptions([...options, '']);
         }
     };
+
+    const printArr = () => {
+        console.log(options);
+    }
 
     const handleRemoveOption = (index) => {
         if (options.length > 2) {
@@ -27,10 +33,18 @@ export default function CreatePoll() {
         const updatedOptions = [...options];
         updatedOptions[index] = value;
         setOptions(updatedOptions);
+        printArr();
     };
 
     const createPoll = () => {
-        socket.emit("create-poll", { data: "First Poll."});
+        const pollData = {
+            topic: votingTopic,
+            options: Object.fromEntries(options.map((option) => [option, 0])),
+          };
+
+        const socket = io.connect("http://localhost:3001");
+
+        socket.emit("create-poll", pollData);
     }
 
     return (
@@ -43,7 +57,7 @@ export default function CreatePoll() {
                 <FormControl isRequired maxW="40%">
                     <Flex>
                     <FormLabel flex="0.5">Voting Topic:</FormLabel>
-                    <Input flex="2" placeholder='Enter the topic or question'/>
+                    <Input flex="2" placeholder='Enter the topic or question' onChange={handleVotingTopicChange}/>
                     </Flex>
                 </FormControl>
             </Flex>
@@ -71,7 +85,7 @@ export default function CreatePoll() {
                     <Button colorScheme="gray" mr={2}>Return</Button>
                     <Button colorScheme="teal" variant='outline' onClick={handleAddOption}>Add Option</Button>
                 </Flex>
-                <Link to="/live-poll">
+                <Link to="/live-view">
                 <Button mr="2%" colorScheme="teal" onClick={createPoll}>Create Poll</Button>
                 </Link>
             </Flex>
