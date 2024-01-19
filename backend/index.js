@@ -21,21 +21,6 @@ const io = new Server(server, {
 
 const polls = {};
 
-const printPolls = () => {
-    console.log(Object.keys(polls).length);
-}
-
-const generateJoinCode = () => {
-    const length = 6;
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let code = '';
-    for (let i = 0; i < length; i++) {
-      code += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return code;
-};
-
-
 io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
 
@@ -50,16 +35,16 @@ io.on("connection", (socket) => {
         io.emit('started', { pollId, data })
     })
 
-    socket.on("join-poll", (joinCode, socket) => {
+    socket.on("join-poll", (joinCode) => {
         if (joinCode in polls) {
-            socket.emit('joined-poll');
+            io.emit('joined-poll', polls[joinCode]);
         } else {
-            socket.emit('error', 'The join is code is invalid. Try again.');
+            io.emit('error', 'The join is code is invalid. Try again.');
         }
     })
 
     socket.on("vote", (data) => {
-        socket.emit("poll-update");
+        socket.emit("poll-update", data);
     })
 
 })
